@@ -19,10 +19,10 @@ def create_celery_app(app=None):
     """Create a new Celery object and tie together the Celery config to the
     app's config. Wrap all tasks in the context of the application.
 
-    params:
+    Args:
         app (Flask)
 
-    returns:
+    Returns:
         celery (Celery)
 
     """
@@ -82,12 +82,17 @@ def extensions(app):
     Args:
         app (Flask): Flask-application instance.
 
+    Returns:
+        None
+
     """
 
     db.init_app(app)
     debug_toolbar.init_app(app)
     #login_manager.init_app(app)
     csrf.init_app(app)
+
+    return None
 
 
 def template_processors(app):
@@ -110,11 +115,14 @@ def template_processors(app):
 
 
 def error_templates(app):
-    """
-    Register 0 or more custom error pages (mutates the app passed in).
+    """Register 0 or more custom error pages (mutates the app passed in).
 
-    :param app: Flask application instance
-    :return: None
+    Args:
+        app (Flask): Flask-application instance.
+    
+    Returns:
+        None
+
     """
 
     def render_status(status):
