@@ -1,9 +1,10 @@
 from sqlalchemy import or_
 
 from myallegan.extensions import db
+from lib.util_sqlalchemy import ResourceMixin
 
 
-class Business(db.Model):
+class Business(ResourceMixin, db.Model):
     __tablename__ = 'businesses'
     id = db.Column(db.Integer, primary_key=True)
 

@@ -4,7 +4,7 @@ from sqlalchemy_utils import database_exists, create_database
 
 from myallegan.app import create_app
 from myallegan.extensions import db
-from myallegan.blueprints.user.models import User
+#from myallegan.blueprints.user.models import User
 
 # Create an app context for the database connection.
 app = create_app()
@@ -39,6 +39,7 @@ def init(with_testdb):
     return None
 
 
+'''
 @click.command()
 def seed():
     """
@@ -56,6 +57,7 @@ def seed():
     }
 
     return User(**params).save()
+'''
 
 
 @click.command()
@@ -70,11 +72,11 @@ def reset(ctx, with_testdb):
     :return: None
     """
     ctx.invoke(init, with_testdb=with_testdb)
-    ctx.invoke(seed)
+    #ctx.invoke(seed)
 
     return None
 
 
 cli.add_command(init)
-cli.add_command(seed)
+#cli.add_command(seed)
 cli.add_command(reset)

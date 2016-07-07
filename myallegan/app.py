@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request
 from celery import Celery
 
-from myallegan.blueprints.page.views import page
+from myallegan.views import (
+    page,
+    business
+)
 
 from myallegan.extensions import (
     db,
@@ -68,6 +71,7 @@ def create_app(settings_override=None):
     template_processors(app)
     
     app.register_blueprint(page)
+    app.register_blueprint(business)
     
     error_templates(app)
 

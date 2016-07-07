@@ -1,0 +1,45 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/items.html' as items %}
+{% import 'macros/form.html' as f with context %}
+
+{% block title %}Business{% endblock %}
+{% block meta_description %}Business in Allegan, Michigan.{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ f.search('business.most_recent') }}
+        </div>
+        <!--
+        <a href="{{ url_for('business.index') }}"
+            class="btn btn-primary pull-right">
+            Create business
+        </a>
+        -->
+    </div>
+
+    {% if businesses.total == 0 %}
+        <h3>No results found</h3>
+
+        {% if request.args.get('q') %}
+            <p>Try limiting or removing your search terms.</p>
+        {% else %}
+            <p>There are no businesses present.</p>
+        {% endif %}
+    {% else %}
+        {% for business in businesses.items %}
+            <table class="table table-striped">
+                <thead>
+                    <td>Title</td>
+                </thead>
+                <tbody>
+                {% for business in businesses %}
+                    <td>{{ business.title}}</td>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+
+        {{ items.paginate(businesses) }}
+    {% endif %}
+{% endblock %}
