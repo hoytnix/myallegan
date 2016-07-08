@@ -26,17 +26,13 @@ from wtforms_components import Unique
 
 from lib.util_wtforms import ModelForm, choices_from_dict
 
-from myallegan.blueprints.business.forms import BusinessForm
 
-class SearchForm(Form):
-    q = StringField('Search terms', [Optional(), Length(1, 256)])
-
-
-class BulkDeleteForm(Form):
-    SCOPE = OrderedDict([
-        ('all_selected_items', 'All selected items'),
-        ('all_search_results', 'All search results')
+class BusinessForm(ModelForm):
+    #Details.
+    title = StringField(validators=[
+        DataRequired(),
+        Length(1, 255)
     ])
 
-    scope = SelectField('Privileges', [DataRequired()],
-                        choices=choices_from_dict(SCOPE, prepend_blank=False))
+    # Relationships
+    # ...

@@ -8,17 +8,15 @@
 {% block body %}
     <div class="row">
         <div class="col-md-6">
-            {{ f.search('business.most_recent') }}
+            {{ f.search(request.endpoint) }}
         </div>
-        <!--
-        <a href="{{ url_for('business.index') }}"
+        <a href="{{ url_for('business.new') }}"
             class="btn btn-primary pull-right">
             Create business
         </a>
-        -->
     </div>
 
-    {% if businesses.total == 0 %}
+    {% if results.total == 0 %}
         <h3>No results found</h3>
 
         {% if request.args.get('q') %}
@@ -27,19 +25,19 @@
             <p>There are no businesses present.</p>
         {% endif %}
     {% else %}
-        {% for business in businesses.items %}
             <table class="table table-striped">
                 <thead>
                     <td>Title</td>
-                </thead>
+                </thead> 
                 <tbody>
-                {% for business in businesses %}
-                    <td>{{ business.title}}</td>
-                {% endfor %}
+                    {% for business in results.items %}
+                    <tr>
+                        <td>{{ business.title }}</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
-        {% endfor %}
 
-        {{ items.paginate(businesses) }}
+        {{ items.paginate(results) }}
     {% endif %}
 {% endblock %}
