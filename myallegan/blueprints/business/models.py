@@ -56,6 +56,10 @@ class Business(ResourceMixin, db.Model):
             return ''
 
         search_query = '%{0}%'.format(query)
-        search_chain = (Business.title.ilike(search_query))
+        search_chain = (Business.title.ilike(search_query),
+                        None)
 
-        return or_(*search_chain)
+        if search_chain[-1] is None:
+            return or_(*search_chain[0])
+        else:
+            return or_(*search_chain)
