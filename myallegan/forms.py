@@ -27,6 +27,8 @@ from wtforms_components import Unique
 from lib.util_wtforms import ModelForm, choices_from_dict
 
 from myallegan.blueprints.business.forms import BusinessForm
+from myallegan.blueprints.work.forms import WorkForm
+
 
 class SearchForm(Form):
     q = StringField('Search terms', [Optional(), Length(1, 256)])

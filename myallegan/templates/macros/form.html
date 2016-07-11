@@ -35,7 +35,7 @@
 
 
 {# Render a form group with errors for various field types. #}
-{%- macro form_group(f, css_class='') -%}
+{%- macro form_group(f, css_class='sm-margin-bottom') -%}
   {% if f.errors %}
     {% set css_class = css_class + ' has-error ' + kwargs.pop('class', '') %}
   {% endif %}

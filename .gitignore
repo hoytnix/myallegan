@@ -8,3 +8,9 @@ instance/settings.py
 
 # Egg
 *.egg-info/*
+
+# Assets
+myallegan/static/assets/
+
+# Docs
+docs/build/

@@ -1,0 +1,74 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/items.html' as items %}
+{% import 'macros/form.html' as f with context %}
+
+{% block title %}Work{% endblock %}
+{% block meta_description %}Work in Allegan, Michigan.{% endblock %}
+
+{% block body %}
+<style>
+.gi {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 28px;
+    border-radius: 50%;
+    height: 28px;
+    width: 28px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-drag: none;
+}
+</style>
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ f.search(request.endpoint) }}
+        </div>
+        <a href="{{ url_for('work.new') }}"
+            class="btn btn-primary pull-right">
+            Create work
+        </a>
+    </div>
+
+    {% if results.total == 0 %}
+        <h3>No results found</h3>
+
+        {% if request.args.get('q') %}
+            <p>Try limiting or removing your search terms.</p>
+        {% else %}
+        <p>There is no work present.</p>
+        {% endif %}
+    {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 28px"></th> <!-- Emblem -->
+                        <th class="col-header">
+                            {{ items.sort('title') }}
+                        </th>
+                        <th class="col-header">
+                            {{ items.sort('salary') }}
+                        </th>
+                        <th class="col-header">
+                            {{ items.sort('employment_status', 'Status') }}
+                        </th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% for work in results.items %}
+                    <tr>
+                        <td><img class="gi" 
+                                 src="{{ url_for('static', filename='assets/business/{}.png'.format(work.business.id)) }}">
+                            </img></td> <!-- Emblem -->
+                        <td>{{ work.title }}</td>
+                        <td>{{ work.salary_text }}</td>
+                        <td>{{ work.status_title }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {{ items.paginate(results) }}
+    {% endif %}
+{% endblock %}

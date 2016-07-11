@@ -3,7 +3,8 @@ from celery import Celery
 
 from myallegan.views import (
     page,
-    business
+    business,
+    work
 )
 
 from myallegan.extensions import (
@@ -72,6 +73,7 @@ def create_app(settings_override=None):
     
     app.register_blueprint(page)
     app.register_blueprint(business)
+    app.register_blueprint(work)
     
     error_templates(app)
 

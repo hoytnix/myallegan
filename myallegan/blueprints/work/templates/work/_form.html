@@ -4,12 +4,12 @@
 {% if request.endpoint.endswith('new') %}
     {% set endpoint = request.endpoint %}
     {% set form_kwargs = {} %}
-    {% set legend = 'Add a new business' %}
+    {% set legend = 'Add a new work' %}
     {% set button = 'Add' %}
 {% else %}
     {% set endpoint = request.endpoint %}
-    {% set form_kwargs = {'id': business.id} %}
-    {% set legend = 'Update this business' %}
+    {% set form_kwargs = {'id': work.id} %}
+    {% set legend = 'Update this work' %}
     {% set button = 'Save' %}
 {% endif %}
 
@@ -24,6 +24,15 @@
                 {% call f.form_group(form.title) %}
                 {% endcall %}
 
+                {% call f.form_group(form.business_id) %}
+                {% endcall %}
+
+                {% call f.form_group(form.salary) %}
+                {% endcall %}
+
+                {% call f.form_group(form.employment_status) %}
+                {% endcall %}
+
                 <hr/>
                 <div class="row">
                     <div class="col-md-6">
@@ -36,7 +45,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="visible-xs visible-sm sm-margin-top"></div>
-                        <a href="{{ url_for('business.index') }}"
+                        <a href="{{ url_for('work.index') }}"
                                 class="btn btn-default btn-block">
                             Cancel
                         </a>
