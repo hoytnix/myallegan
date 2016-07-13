@@ -1,3 +1,9 @@
+# Globals
+from myallegan.blueprints.business.forms import BusinessForm
+from myallegan.blueprints.work.forms import WorkForm
+
+
+# Locals
 from collections import OrderedDict
 
 from flask_wtf import Form
@@ -25,9 +31,6 @@ from flask_wtf.file import (
 from wtforms_components import Unique
 
 from lib.util_wtforms import ModelForm, choices_from_dict
-
-from myallegan.blueprints.business.forms import BusinessForm
-from myallegan.blueprints.work.forms import WorkForm
 
 
 class SearchForm(Form):

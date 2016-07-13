@@ -1,11 +1,14 @@
-from collections import OrderedDict
-
-from sqlalchemy import or_
+# Locals
+from myallegan.models import Business
 
 from myallegan.extensions import db
 from lib.util_sqlalchemy import ResourceMixin
 
-from myallegan.models import Business
+# Globals
+from collections import OrderedDict
+from math import ceil, floor
+
+from sqlalchemy import or_
 
 
 class Work(ResourceMixin, db.Model):
@@ -27,6 +30,7 @@ class Work(ResourceMixin, db.Model):
     # Details
     title = db.Column(db.String(128), nullable=False, index=True)
     salary = db.Column(db.Float())
+    salary_percentile = db.Column(db.Integer, nullable=False, default=1)
     employment_status = db.Column(db.Enum(*EMPLOYMENT_STATUS, name='role_types', 
         native_enum=False), index=True, nullable=False, server_default='part')
 
@@ -38,12 +42,53 @@ class Work(ResourceMixin, db.Model):
 
     @property
     def salary_text(self):
-        return '%.2f' % self.salary
+        if self.salary:
+            return '%d' % self.salary
+        else:
+            return None
 
     @property
     def business(self):
         business = Business.query.get(self.business_id)
         return business
+
+
+
+    # Salary Percentiles ------------------------------------------------------             
+    @classmethod
+    def init_update_percentiles(cls):
+        from myallegan.tasks import adjust_salary_percentile
+        adjust_salary_percentile.delay()
+
+    @classmethod
+    def update_percentiles(cls):
+        jobs = Work.query.order_by(Work.salary.asc(), Work.id.asc()).all()
+        jobs_total = jobs.__len__()
+
+        odd = jobs_total % 3
+        each = jobs_total / 3
+        if odd is 1: 
+            amts = {1: floor(each), 2: ceil(each), 3: floor(each)}
+        elif odd is 2:
+            amts = {1: ceil(each), 2: ceil(each), 3: floor(each)}
+        else:
+            amts = {1: each, 2: each, 3: each}
+        
+        percentile = 1
+        counter = 0
+        for job in jobs:
+            counter += 1
+
+            cls.update_percentile(job.id, percentile)
+
+            if counter == amts[percentile]:
+                percentile += 1
+                counter = 0
+
+    @classmethod
+    def update_percentile(cls, id, value):
+        Work.query.filter(Work.id==id).update({'salary_percentile': value})
+        db.session.commit()
 
 
     # Standard methods
@@ -65,6 +110,8 @@ class Work(ResourceMixin, db.Model):
 
         db.session.add(Work(**params))
         db.session.commit()
+        
+        cls.init_update_percentiles()
 
         return True
 

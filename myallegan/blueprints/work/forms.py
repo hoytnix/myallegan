@@ -1,3 +1,8 @@
+# Locals
+from myallegan.models import Work
+
+
+# Globals
 from collections import OrderedDict
 
 from flask_wtf import Form
@@ -25,8 +30,6 @@ from flask_wtf.file import (
 from wtforms_components import Unique
 
 from lib.util_wtforms import ModelForm, choices_from_dict
-
-from myallegan.models import Work
 
 
 class WorkForm(ModelForm):

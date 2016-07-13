@@ -4,5 +4,30 @@
 {% block meta_description %}Work in Allegan, Michigan.{% endblock %}
 
 {% block body %}
-Hello!
+<div class="container sm-margin-top">
+    <div class="row text-center lg-margin-bottom">
+        <h1>Work in Allegan.</h1>
+        <h3 class="text-muted">
+            Who's hiring in Allegan, Michigan?
+        </h3>
+    </div>
+    <div class="row text-center">
+        <div class="col-lg-4">
+            <i class="fa fa-fw fa-4x fa-star text-primary"></i>
+            <h2>Most Recent</h2>
+            <p class="text-muted">View the most recently opened positions.</p>
+            <p>
+                <a href="{{ url_for('work.most_recent') }}" class="btn btn-default">Explore</a>
+            </p>
+        </div>
+        <div class="col-lg-4 md-margin-top">
+            <i class="fa fa-fw fa-4x fa-line-chart text-primary"></i>
+            <h2>Highest Paying</h2>
+            <p class="text-muted">The highest paying jobs in Allegan.</p>
+            <p>
+                <a href="{{ url_for('work.highest_paying') }}" class="btn btn-default">Explore</a>
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

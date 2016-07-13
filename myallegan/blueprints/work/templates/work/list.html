@@ -45,13 +45,13 @@
                     <tr>
                         <th style="width: 28px"></th> <!-- Emblem -->
                         <th class="col-header">
-                            {{ items.sort('title') }}
+                            Title
                         </th>
                         <th class="col-header">
-                            {{ items.sort('salary') }}
+                            Salary
                         </th>
                         <th class="col-header">
-                            {{ items.sort('employment_status', 'Status') }}
+                            Status
                         </th>
                     </tr>
                 </thead> 
@@ -59,10 +59,10 @@
                     {% for work in results.items %}
                     <tr>
                         <td><img class="gi" 
-                                 src="{{ url_for('static', filename='assets/business/{}.png'.format(work.business.id)) }}">
+                                 src="{{ url_for('static', filename='assets/business/{}.png'.format(work.id % 3)) }}">
                             </img></td> <!-- Emblem -->
                         <td>{{ work.title }}</td>
-                        <td>{{ work.salary_text }}</td>
+                        <td>{{ work.salary_text }} ({{ work.salary_percentile }})</td>
                         <td>{{ work.status_title }}</td>
                     </tr>
                     {% endfor %}

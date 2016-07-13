@@ -49,7 +49,7 @@ def new():
 
         if Work.create(form_params):
             flash('Work has been created successfully.', 'success')
-            return redirect(url_for('{}.{}'.format(blueprint_title, 'index')))
+            return redirect(url_for('{}.{}'.format(blueprint_title, 'most_recent')))
 
     params = {
         'form': form,
@@ -92,6 +92,23 @@ def most_recent(page):
     paginated_results = Work.query \
             .filter(Work.search(request.args.get('q', ''))) \
             .order_by(text(order_values)) \
+            .paginate(page, 50, True)
+
+    params = {
+        'form': search_form,
+        'results': paginated_results
+    }
+    return render_template('work/list.html', **params)
+
+
+@work.route('/highest-paying', defaults={'page': 1})
+@work.route('/highest-paying/page/<int:page>')
+def highest_paying(page):
+    search_form = SearchForm()
+
+    paginated_results = Work.query \
+            .filter(Work.search(request.args.get('q', ''))) \
+            .order_by(Work.salary.desc(), Work.id.desc()) \
             .paginate(page, 50, True)
 
     params = {
