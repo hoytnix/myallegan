@@ -19,6 +19,18 @@
     -ms-user-select: none;
     -webkit-user-drag: none;
 }
+
+.gt {
+    width:28px;
+    height:28px;
+    border-radius:14px;
+    font-size:14px;
+    color:#fff;
+    line-height:28px;
+    text-align:center;
+    background:#000;
+    overflow: hidden;
+}
 </style>
 
     <div class="row">
@@ -57,10 +69,15 @@
                 </thead> 
                 <tbody>
                     {% for work in results.items %}
+                    {% set asset_img = asset('business', (work.id % 4) + 1) %}
                     <tr>
-                        <td><img class="gi" 
-                                 src="{{ url_for('static', filename='assets/business/{}.png'.format(work.id % 3)) }}">
-                            </img></td> <!-- Emblem -->
+                        <td>
+                        {% if asset_img %}
+                            <img class="gi" src="{{ asset_img }}"></img>
+                        {% else %}
+                            <div class="gt">{{ work.title[0].upper() }}</div>
+                        {% endif %}
+                        </td> <!-- Emblem -->
                         <td>{{ work.title }}</td>
                         <td>{{ work.salary_text }} ({{ work.salary_percentile }})</td>
                         <td>{{ work.status_title }}</td>

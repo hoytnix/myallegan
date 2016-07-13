@@ -14,6 +14,8 @@ from myallegan.extensions import (
     csrf
 )
 
+from lib.util_assets import asset_by_id
+
 CELERY_TASK_LIST = [
     'myallegan.tasks'
 ]
@@ -115,7 +117,7 @@ def template_processors(app):
     """
 
     #app.jinja_env.filters['filter_name'] = filter_function
-    #app.jinja_env.globals.update(current_year=current_year)
+    app.jinja_env.globals.update(asset=asset_by_id)
 
     return app.jinja_env
 
