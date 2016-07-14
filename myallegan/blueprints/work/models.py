@@ -137,6 +137,6 @@ class Work(ResourceMixin, db.Model):
                         None)
 
         if search_chain[-1] is None:
-            return or_(*search_chain[0])
+            return or_(search_chain[0])
         else:
             return or_(*search_chain)
