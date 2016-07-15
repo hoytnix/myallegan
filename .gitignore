@@ -13,4 +13,4 @@ instance/settings.py
 myallegan/static/assets/
 
 # Docs
-docs/build/
+docs/docstrings/build/
