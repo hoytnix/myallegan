@@ -13,6 +13,8 @@ work = Blueprint(blueprint_title, __name__, template_folder='templates',
 # Index -----------------------------------------------------------------------
 @work.route('/')
 def index():
+    Work.update_percentiles()
+
     return render_template('work/index.html')
 
 

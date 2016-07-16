@@ -14,3 +14,7 @@ myallegan/static/assets/
 
 # Docs
 docs/docstrings/build/
+
+# PyTest
+.cache/
+.coverage

@@ -30,6 +30,25 @@
     text-align:center;
     background:#000;
     overflow: hidden;
+    margin: 0;
+}
+
+.table > tbody > tr > td {
+     vertical-align: middle;
+}
+td {
+    text-align: center;
+}
+th {
+    text-align: center;
+}
+
+.fa-dollar {
+    color: green;
+}
+
+td.salary span.salary-time {
+    font-size: 90%;
 }
 </style>
 
@@ -55,8 +74,8 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th style="width: 28px"></th> <!-- Emblem -->
-                        <th class="col-header">
+                        <th style="width: 50px"></th> <!-- Emblem -->
+                        <th class="col-header" style="text-align: left">
                             Title
                         </th>
                         <th class="col-header">
@@ -65,6 +84,8 @@
                         <th class="col-header">
                             Status
                         </th>
+                        <th class="col-header"></th> <!-- Button -->
+                        <th class="col-header"></th> <!-- Button -->
                     </tr>
                 </thead> 
                 <tbody>
@@ -78,9 +99,23 @@
                             <div class="gt">{{ work.title[0].upper() }}</div>
                         {% endif %}
                         </td> <!-- Emblem -->
-                        <td>{{ work.title }}</td>
-                        <td>{{ work.salary_text }} ({{ work.salary_percentile }})</td>
+                        <td style="text-align: left">{{ work.title }}</td>
+
+                        <!-- Salary -->
+                        <td class="salary">
+                            {{ work.salary_text }}
+                            <span class="salary-time">/ hour</span>
+                            
+                            <br>
+                            {% for n in range(work.salary_percentile) %}
+                                <i class="fa fa-dollar"></i>
+                            {% endfor %}
+                        </td>
+                        <!-- End Salary -->
+
                         <td>{{ work.status_title }}</td>
+                        <td><a href="#" class="btn btn-primary">Details</a></td>
+                        <td><a href="#" class="btn btn-primary">Apply</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

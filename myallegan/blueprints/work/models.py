@@ -43,7 +43,7 @@ class Work(ResourceMixin, db.Model):
     @property
     def salary_text(self):
         if self.salary:
-            return '%d' % self.salary
+            return '$%.2f' % self.salary
         else:
             return None
 
@@ -62,28 +62,55 @@ class Work(ResourceMixin, db.Model):
 
     @classmethod
     def update_percentiles(cls):
+        # Configuration.
+        _PERCENTILE_CONFIG = 3  # Nice balance of clean and info.
+        _PERCENTILES = range(1, _PERCENTILE_CONFIG + 1)
+
         jobs = Work.query.order_by(Work.salary.asc(), Work.id.asc()).all()
         jobs_total = jobs.__len__()
 
-        odd = jobs_total % 3
-        each = jobs_total / 3
-        if odd is 1: 
-            amts = {1: floor(each), 2: ceil(each), 3: floor(each)}
-        elif odd is 2:
-            amts = {1: ceil(each), 2: ceil(each), 3: floor(each)}
-        else:
-            amts = {1: each, 2: each, 3: each}
-        
-        percentile = 1
-        counter = 0
+        salaries = {}
         for job in jobs:
-            counter += 1
+            key = job.salary
+            if key:
+                if key not in salaries:
+                    salaries[key] = 1
+                else:
+                    salaries[key] += 1
+            else:
+                jobs_total -= 1
+        salaries = OrderedDict(sorted(salaries.items()))
 
-            cls.update_percentile(job.id, percentile)
+        # members, member count
+        percentiles = {}
+        for _PERCENTILE in _PERCENTILES:
+            percentiles[_PERCENTILE] = [[], 0]
+        
+        percentile_counter = 1
+        for salary in salaries:
+            members = salaries[salary] 
+            percentile = percentiles[percentile_counter]
 
-            if counter == amts[percentile]:
-                percentile += 1
-                counter = 0
+            percentile[0].append(salary)
+            percentile[1] += members
+
+            count = percentile[1]
+            jobs_available = jobs_total
+            if percentile_counter > 1:
+                for k in range(1, percentile_counter):
+                    jobs_available -= percentiles[k][1]
+
+            if percentile_counter < _PERCENTILE_CONFIG:
+                r = count / ((1 / ((_PERCENTILE_CONFIG + 1) - percentile_counter)) * jobs_available)
+                if r > 1:
+                    percentile_counter += 1
+
+        for job in jobs:
+            for percentile_key in percentiles:
+                percentile = percentiles[percentile_key]
+                if job.salary in percentile[0]:
+                    cls.update_percentile(job.id, percentile_key)
+
 
     @classmethod
     def update_percentile(cls, id, value):
